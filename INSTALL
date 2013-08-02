@@ -1,0 +1,43 @@
+===========
+ACTIVATION
+===========
+
+Activate the extension for your admin siteaccess like this
+
+[ExtensionSettings]
+ActiveAccessExtensions[]=xrowmailchange
+
+===========
+AUTOLOADS
+===========
+
+Run the autoload generation from eZ Root.
+
+php bin/php/ezpgenerateautoloads.php -e
+
+===========
+MYSQL TABLE
+===========
+
+Add the required tables to your database like this:
+
+mysql -u'USERNAME' -p -D DBNAME < extension/xrowmailchange/sql/table.sql
+
+===========
+PERMISSIONS
+===========
+
+nothing to change
+
+==========
+WORKFLOW
+==========
+
+Add the trigger called 
+
+==========
+CRONJOB
+==========
+
+Setup the Cronjob in order to keep your changemail table clean example at 06:10 every day:
+10 6 * * * cd $EZPUBLISHROOT && $PHP runcronjobs.php clean_change_mail_table
