@@ -5,7 +5,7 @@ $http = eZHTTPTool::instance();
 $namedParameters = $Module->NamedParameters;
 $tpl = eZTemplate::instance();
 $db = eZDB::instance();
-$mailchangeINI = eZINI::instance( 'xrowmailchange.ini' );
+$xrowChangeMailINI = eZINI::instance( 'xrowmailchange.ini' );
 
 $Result = array();
 $Result['content'] = $tpl->fetch( 'design:mailchange/confirmation.tpl' );

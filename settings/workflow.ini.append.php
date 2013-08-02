@@ -3,9 +3,6 @@
 [EventSettings]
 RepositoryDirectories[]=extension/xrowmailchange/eventtypes
 ExtensionDirectories[]=xrowmailchange
-AvailableEventTypes[]=event_sendchangenotification
-
-#[OperationSettings]
-#AvailableOperationList[]=content_read
+AvailableEventTypes[]=event_notifyafterpublish
 
 */ ?>

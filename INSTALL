@@ -33,7 +33,9 @@ nothing to change
 WORKFLOW
 ==========
 
-Add the trigger called 
+Create a Workflow for "Event / Notify"
+Create a Multiplexer Workflow which runs your previously created workflow and modify it to your needs(eg. dont run for admins and only on existing user objects).
+Add the Multiplexer Wokflow to your "after" - "publish" Trigger
 
 ==========
 CRONJOB
