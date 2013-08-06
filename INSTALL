@@ -35,7 +35,14 @@ WORKFLOW
 
 Create a Workflow for "Event / Notify"
 Create a Multiplexer Workflow which runs your previously created workflow and modify it to your needs(eg. dont run for admins and only on existing user objects).
-Add the Multiplexer Wokflow to your "after" - "publish" Trigger
+Add the Multiplexer Wokflow to your "before" - "publish" Trigger
+
+====================
+TEMPLATE CUSTOMIZING
+====================
+
+have a look into extension\xrowmailchange\design\standard\templates\content\datatype\edit\ezuser.tpl
+if you are overriding this template yourself as well then you should adapt line 43 - 48
 
 ==========
 CRONJOB

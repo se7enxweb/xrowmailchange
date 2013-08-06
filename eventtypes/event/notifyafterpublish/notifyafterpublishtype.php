@@ -7,12 +7,14 @@ class notifyAfterPublishType extends eZWorkflowEventType
     function notifyAfterPublishType()
     {
         $this->eZWorkflowEventType( notifyAfterPublishType::WORKFLOW_TYPE_STRING, ezpI18n::tr( 'extension/xrowmailchange', 'Notify' ) );
-        $this->setTriggerTypes( array( 'content' => array( 'publish' => array ( 'after' ) ) ) );
+        $this->setTriggerTypes( array( 'content' => array( 'publish' => array ( 'before' ) ) ) );
     }
     
     function execute( $process, $event )
     {
+		$parameters = $process->attribute( 'parameter_list' );
 		$xrowChangeMailINI = eZINI::instance( 'xrowmailchange.ini' );
+		$http = eZHTTPTool::instance();
 		$exclude_siteaccesses = $xrowChangeMailINI->variable( 'GeneralSettings', 'WorkflowExcludeSiteaccess' );
 		$siteaccess = eZSiteAccess::current();
 		if( !in_array($siteaccess["name"], $exclude_siteaccesses) )
@@ -20,25 +22,30 @@ class notifyAfterPublishType extends eZWorkflowEventType
 			$cur_user = eZUser::currentUser();
 			$contentobject_id = $cur_user->attribute("contentobject_id");
 			$user_obj = eZContentObject::fetch($contentobject_id);
-			$new_mail = $cur_user->attribute("email");
-			//TODO
-			$old_user_node = eZContentObjectTreeNode::fetchByContentObjectID($contentobject_id, true, $user_obj->previousVersion());
-			$old_mail = $old_user_node;
-			//TODO
-			var_dump($old_user_node);
-			die("drin");
-			if ($new_mail != $old_mail)
+			$old_mail = $cur_user->attribute("email");
+			$new_mail = $http->postVariable('new_mail');
+			
+			if( $new_mail !== $old_mail)
 			{
 				$db = eZDB::instance();
-				$old_user = eZUser::fetch();
+				$time = time();
+				$hash = md5( mt_rand() . $time . $contentobject_id );
+				$check_previous_request = $db->arrayQuery("SELECT * FROM xrow_mailchange WHERE user_id = $contentobject_id;");
+				if ( count($check_previous_request) >= 1 )
+				{
+					$db->begin();
+					$db->arrayQuery("DELETE FROM xrow_mailchange WHERE user_id = $contentobject_id;");
+					$db->commit();
+				}
+				$db->begin();
+				$db->arrayQuery("INSERT INTO xrow_mailchange ( hash, user_id, new_mail, change_time ) VALUES ( '$hash', $contentobject_id, '$new_mail', $time );");
+				$db->commit();
+				//mail versand
+				//opeartor bauen der anzeigt ob unbestätigt ist
+				//modul bauen mit template für bestätigung
 			}
 		}
-		/*
-			$users = $db->arrayQuery("SELECT user_id, last_visit_timestamp FROM ezuservisit WHERE user_id != $current_userID AND 
-     		$db->begin();
-		    $db->arrayQuery("INSERT INTO xrowmailchange_notification ( user_id, path_string, timestamp ) VALUES ( $id, '$path_string', $now_time );");
-		    $db->commit();
-		*/
+
         return eZWorkflowType::STATUS_ACCEPTED;
     }
 }
