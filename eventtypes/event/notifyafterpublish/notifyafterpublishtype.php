@@ -14,9 +14,11 @@ class notifyAfterPublishType extends eZWorkflowEventType
     {
 		$parameters = $process->attribute( 'parameter_list' );
 		$xrowChangeMailINI = eZINI::instance( 'xrowmailchange.ini' );
+		$siteINI = eZINI::instance( 'site.ini' );
 		$http = eZHTTPTool::instance();
 		$exclude_siteaccesses = $xrowChangeMailINI->variable( 'GeneralSettings', 'WorkflowExcludeSiteaccess' );
 		$siteaccess = eZSiteAccess::current();
+		$tpl = eZTemplate::factory();
 		if( !in_array($siteaccess["name"], $exclude_siteaccesses) )
 		{
 			$cur_user = eZUser::currentUser();
@@ -40,9 +42,22 @@ class notifyAfterPublishType extends eZWorkflowEventType
 				$db->begin();
 				$db->arrayQuery("INSERT INTO xrow_mailchange ( hash, user_id, new_mail, change_time ) VALUES ( '$hash', $contentobject_id, '$new_mail', $time );");
 				$db->commit();
-				//mail versand
+				
+				$tpl->setVariable( 'hostname', eZSys::hostname() );
+				$tpl->setVariable( 'hash', $hash );
+				$tpl->setVariable( 'new_mail', $new_mail );
+				$tpl->setVariable( 'old_mail', $old_mail );
+				
+				$templateResult = $tpl->fetch( 'design:mailchange/mail/activation.tpl' );
+			
+				$mail = new eZMail();
+				$mail->setSender( $siteINI->variable( 'MailSettings', 'EmailSender' ) );
+				$mail->setReceiver( $old_mail );
+				$mail->setSubject( ezpI18n::tr( 'extension/xrowmailchange', 'Please approve you new email address' ) );
+				$mail->setBody( $templateResult );
+				$mailResult = eZMailTransport::send( $mail );
+				
 				//opeartor bauen der anzeigt ob unbestätigt ist
-				//modul bauen mit template für bestätigung
 			}
 		}
 
