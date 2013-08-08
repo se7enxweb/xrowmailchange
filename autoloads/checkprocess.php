@@ -36,10 +36,6 @@ class checkMailChangeProcess
                 {
                     $operatorValue =  $active_request[0]["new_mail"];
                 }
-                else
-                {
-                    $operatorValue = false;
-                }
             } break;
          }
     }

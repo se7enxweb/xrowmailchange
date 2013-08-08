@@ -44,7 +44,7 @@
         <input id="{$id_base}_email" class="ezcc-{$attribute.object.content_class.identifier} ezcca-{$attribute.object.content_class.identifier}_{$attribute.contentclass_attribute_identifier}" type="text" name="{$attribute_base}_data_user_email_{$attribute.id}" size="28" value="{$attribute.content.email|wash( xhtml )}" />
     {else}
         <input id="{$id_base}_email" class="ezcc-{$attribute.object.content_class.identifier} ezcca-{$attribute.object.content_class.identifier}_{$attribute.contentclass_attribute_identifier}" type="hidden" name="{$attribute_base}_data_user_email_{$attribute.id}" size="28" value="{$attribute.content.email|wash( xhtml )}" />
-        <input name="new_mail" type="text" value="{if and(is_set(ezhttp().post.new_mail), ezhttp().post.new_mail|ne(""))}{ezhttp().post.new_mail}{elseif and(is_set($attribute.content.email), $attribute.content.email|ne(""))}{$attribute.content.email|wash( xhtml )}{/if}" />{def $new_mail = checkmailchangeprocess($attribute.content.contentobject_id)}{if $new_mail|ne(false)}({'Email not approved yet: "%mail"'|i18n('extension/xrowmailchange', '', hash( '%mail', $new_mail ))}){/if}
+        <input name="new_mail" type="text" value="{if and(is_set(ezhttp().post.new_mail), ezhttp().post.new_mail|ne(""))}{ezhttp().post.new_mail}{elseif and(is_set($attribute.content.email), $attribute.content.email|ne(""))}{$attribute.content.email|wash( xhtml )}{/if}" />{def $new_mail = checkmailchangeprocess($attribute.content.contentobject_id)}{if is_set($new_mail)}({'Email not approved yet: "%mail"'|i18n('extension/xrowmailchange', '', hash( '%mail', $new_mail ))}){/if}
     {/if}
 </div>
 
