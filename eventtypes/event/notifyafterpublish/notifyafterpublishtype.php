@@ -30,6 +30,7 @@ class notifyAfterPublishType extends eZWorkflowEventType
 			if( $new_mail !== $old_mail)
 			{
 				$db = eZDB::instance();
+				$receiver_type = $xrowChangeMailINI->variable( 'GeneralSettings', 'ConfirmationMailTo' );
 				$time = time();
 				$hash = md5( mt_rand() . $time . $contentobject_id );
 				$check_previous_request = $db->arrayQuery("SELECT * FROM xrow_mailchange WHERE user_id = $contentobject_id;");
@@ -52,7 +53,14 @@ class notifyAfterPublishType extends eZWorkflowEventType
 			
 				$mail = new eZMail();
 				$mail->setSender( $siteINI->variable( 'MailSettings', 'EmailSender' ) );
-				$mail->setReceiver( $old_mail );
+				if ( $receiver_type == "oldaddress")
+				{
+					$mail->setReceiver( $old_mail );
+				}
+				else
+				{
+					$mail->setReceiver( $new_mail );
+				}
 				$mail->setSubject( ezpI18n::tr( 'extension/xrowmailchange', 'Please approve you new email address' ) );
 				$mail->setBody( $templateResult );
 				$mailResult = eZMailTransport::send( $mail );
