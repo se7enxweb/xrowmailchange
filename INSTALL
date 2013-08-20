@@ -16,6 +16,12 @@ Run the autoload generation from eZ Root.
 php bin/php/ezpgenerateautoloads.php -e
 
 ===========
+CACHE
+===========
+
+Clear the eZ Cache
+
+===========
 MYSQL TABLE
 ===========
 
