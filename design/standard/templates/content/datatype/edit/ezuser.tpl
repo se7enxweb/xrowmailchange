@@ -52,7 +52,8 @@
 {if ezini( 'UserSettings', 'RequireConfirmEmail' )|eq( 'true' )}
 <div class="element">
     <label for="{$id_base}_email_confirm">{'Confirm email'|i18n( 'design/standard/content/datatype' )}:</label>
-    <input id="{$id_base}_email_confirm" class="ezcc-{$attribute.object.content_class.identifier} ezcca-{$attribute.object.content_class.identifier}_{$attribute.contentclass_attribute_identifier}" type="text" name="{$attribute_base}_data_user_email_confirm_{$attribute.id}" size="28" value="{cond( ezhttp_hasvariable( concat( $attribute_base, '_data_user_email_confirm_', $attribute.id ), 'post' ), ezhttp( concat( $attribute_base, '_data_user_email_confirm_', $attribute.id ), 'post')|wash( xhtml ), $attribute.content.email )}" />
+    <input id="{$id_base}_email_confirm" type="hidden" name="{$attribute_base}_data_user_email_confirm_{$attribute.id}" value="{cond( ezhttp_hasvariable( concat( $attribute_base, '_data_user_email_confirm_', $attribute.id ), 'post' ), ezhttp( concat( $attribute_base, '_data_user_email_confirm_', $attribute.id ), 'post')|wash( xhtml ), $attribute.content.email )}" />
+    <input id="new_mail_confirm" class="ezcc-{$attribute.object.content_class.identifier} ezcca-{$attribute.object.content_class.identifier}_{$attribute.contentclass_attribute_identifier}" type="text" name="new_mail_confirm" size="28" value="{if and(is_set(ezhttp().post.new_mail_confirm), ezhttp().post.new_mail_confirm|ne(""))}{ezhttp().post.new_mail_confirm}{elseif and(is_set($attribute.content.email), $attribute.content.email|ne(""))}{$attribute.content.email|wash( xhtml )}{/if}" />
 </div>
 {/if}
 
