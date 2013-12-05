@@ -40,7 +40,7 @@
 {* Email. *}
 <div class="element">
     <label for="{$id_base}_email">{'Email'|i18n( 'design/standard/content/datatype' )}:</label>
-    {if $#object.current_version|eq(1)}
+    {if $#object.published|eq(0)}
         <input id="{$id_base}_email" class="ezcc-{$attribute.object.content_class.identifier} ezcca-{$attribute.object.content_class.identifier}_{$attribute.contentclass_attribute_identifier}" type="text" name="{$attribute_base}_data_user_email_{$attribute.id}" size="28" value="{$attribute.content.email|wash( xhtml )}" />
     {else}
         <input id="{$id_base}_email" class="ezcc-{$attribute.object.content_class.identifier} ezcca-{$attribute.object.content_class.identifier}_{$attribute.contentclass_attribute_identifier}" type="hidden" name="{$attribute_base}_data_user_email_{$attribute.id}" size="28" value="{$attribute.content.email|wash( xhtml )}" />
