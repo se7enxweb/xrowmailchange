@@ -27,7 +27,7 @@ class notifyAfterPublishType extends eZWorkflowEventType
 			$old_mail = $cur_user->attribute("email");
 			$new_mail = $http->postVariable('new_mail');
 			
-			if( $new_mail !== $old_mail)
+			if( $new_mail != "" && $new_mail !== $old_mail)
 			{
 				$db = eZDB::instance();
 				$receiver_type = $xrowChangeMailINI->variable( 'GeneralSettings', 'ConfirmationMailTo' );
@@ -64,8 +64,6 @@ class notifyAfterPublishType extends eZWorkflowEventType
 				$mail->setSubject( ezpI18n::tr( 'extension/xrowmailchange', 'Please approve you new email address' ) );
 				$mail->setBody( $templateResult );
 				$mailResult = eZMailTransport::send( $mail );
-				
-				//opeartor bauen der anzeigt ob unbestätigt ist
 			}
 		}
 
