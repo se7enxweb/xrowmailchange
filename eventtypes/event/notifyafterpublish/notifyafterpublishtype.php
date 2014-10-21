@@ -20,25 +20,22 @@ class notifyAfterPublishType extends eZWorkflowEventType
 		$siteaccess = eZSiteAccess::current();
 		$tpl = eZTemplate::factory();
 		$cur_user = eZUser::currentUser();
-		$contentobject_id = $cur_user->attribute("contentobject_id");
-		$user_obj = eZContentObject::fetch($contentobject_id);
-		$old_mail = $cur_user->attribute("email");
+		$contentobject_id = $parameters["object_id"];
+		$user = eZuser::fetch($contentobject_id);
+		$old_mail = $user->attribute("email");
 		$new_mail = $http->postVariable('new_mail');
 		$exclude_usergroups = $xrowChangeMailINI->variable( 'GeneralSettings', 'UserGroupExcludes' );
 		$skip_workflow = false;
 		
 		foreach ( $exclude_usergroups as $usergroup_id )
 		{
-			if( !in_array($usergroup_id, $cur_user->attribute("groups")) )
+			if( in_array($usergroup_id, $cur_user->attribute("groups")) )
 			{
 				$skip_workflow = true;
 			}
 		}
 		
-		if( !in_array($siteaccess["name"], $exclude_siteaccesses)
-			AND if( $new_mail != "" && $new_mail !== $old_mail)
-			AND $skip_workflow === false
-		)
+		if( !in_array($siteaccess["name"], $exclude_siteaccesses) AND ($new_mail != "" && $new_mail !== $old_mail) AND $skip_workflow === false )
 		{
 			$db = eZDB::instance();
 			$receiver_type = $xrowChangeMailINI->variable( 'GeneralSettings', 'ConfirmationMailTo' );
@@ -54,14 +51,14 @@ class notifyAfterPublishType extends eZWorkflowEventType
 			$db->begin();
 			$db->arrayQuery("INSERT INTO xrow_mailchange ( hash, user_id, new_mail, change_time ) VALUES ( '$hash', $contentobject_id, '$new_mail', $time );");
 			$db->commit();
-			
+
 			$tpl->setVariable( 'hostname', eZSys::hostname() );
 			$tpl->setVariable( 'hash', $hash );
 			$tpl->setVariable( 'new_mail', $new_mail );
 			$tpl->setVariable( 'old_mail', $old_mail );
-			
+
 			$templateResult = $tpl->fetch( 'design:mailchange/mail/activation.tpl' );
-		
+	
 			$mail = new eZMail();
 			$mail->setSender( $siteINI->variable( 'MailSettings', 'EmailSender' ) );
 			if ( $receiver_type == "oldaddress")
