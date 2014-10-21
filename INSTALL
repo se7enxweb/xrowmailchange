@@ -40,7 +40,7 @@ WORKFLOW
 ==========
 
 Create a Workflow for "Event / Notify"
-Create a Multiplexer Workflow which runs your previously created workflow and modify it to your needs(eg. dont run for admins and only on existing user objects).
+Create a Multiplexer Workflow which runs your previously created workflow and modify it to your needs(Attention: dont exclude any usergroups from workflow process! Better use the ini settings instead! Else you run into editing problems).
 Add the Multiplexer Wokflow to your "before" - "publish" Trigger
 
 ====================
