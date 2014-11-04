@@ -73,11 +73,15 @@ class notifyAfterPublishType extends eZWorkflowEventType
             $mail->setBody( $templateResult );
             $mailResult = eZMailTransport::send( $mail );
         }
-        else
+        else if( $new_mail != "" )
         {
             //fallback for cases where the workflow shouldnt run through the mail change process
             $user->setAttribute( "email", "$new_mail" );
             $user->store();
+        }
+        else
+        {
+            eZDebug::writeError( "Something went wrong when changing the users mail address(notifyafterpublishtype.php): $new_mail (=new mail), $old_mail (=old mail), $contentobject_id (=user id)" )
         }
 
         return eZWorkflowType::STATUS_ACCEPTED;
