@@ -20,7 +20,20 @@ class notifyAfterPublishType extends eZWorkflowEventType
         $siteaccess = eZSiteAccess::current();
         $tpl = eZTemplate::factory();
         $cur_user = eZUser::currentUser();
-        $contentobject_id = $parameters["object_id"];
+        if( isset($parameters["object_id"]) )
+        {
+            $contentobject_id = $parameters["object_id"];
+        }
+        elseif( $http->postVariable('mail_change_user_id') AND $http->postVariable('mail_change_user_id') != "" )
+        {
+            $contentobject_id = $http->postVariable('mail_change_user_id');
+        }
+        else
+        {
+            //if this is the case, we have done something wrong. to avoid issues we just let it run through
+            eZDebug::writeError( "Notifyafterpublish.php: Could not find the user for the mail change process." );
+            return eZWorkflowType::STATUS_ACCEPTED;
+        }
         $user = eZuser::fetch($contentobject_id);
         $old_mail = $user->attribute("email");
         $new_mail = $http->postVariable('new_mail');

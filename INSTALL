@@ -50,6 +50,10 @@ TEMPLATE CUSTOMIZING
 have a look into extension\xrowmailchange\design\standard\templates\content\datatype\edit\ezuser.tpl
 if you are overriding this template yourself as well then you should adapt line 43 - 57
 
+If you use the mailchange for different templates then the ezuser.tpl then you will also need to add this line with the ID of the user who is getting a mail change.
+
+<input name="mail_change_user_id" value="{$current_user.contentobject_id}" type="hidden" /> 
+
 ==========
 CRONJOB
 ==========
