@@ -81,7 +81,7 @@ class notifyAfterPublishType extends eZWorkflowEventType
         }
         else
         {
-            eZDebug::writeError( "Something went wrong when changing the users mail address(notifyafterpublishtype.php): $new_mail (=new mail), $old_mail (=old mail), $contentobject_id (=user id)" )
+            eZDebug::writeError( "Something went wrong when changing the users mail address(notifyafterpublishtype.php): $new_mail (=new mail), $old_mail (=old mail), $contentobject_id (=user id)" );
         }
 
         return eZWorkflowType::STATUS_ACCEPTED;
