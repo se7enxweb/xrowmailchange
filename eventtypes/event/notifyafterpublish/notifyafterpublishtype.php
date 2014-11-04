@@ -73,7 +73,7 @@ class notifyAfterPublishType extends eZWorkflowEventType
             $mail->setBody( $templateResult );
             $mailResult = eZMailTransport::send( $mail );
         }
-        else if( $new_mail != "" )
+        elseif( $new_mail != "" )
         {
             //fallback for cases where the workflow shouldnt run through the mail change process
             $user->setAttribute( "email", "$new_mail" );
