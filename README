@@ -1,0 +1,3 @@
+KNOWN ISSUES:
+
+- validation of eZ Publish is disabled so the user dont receive any error message about empty or invalid mails. Its just not stored in that case.
