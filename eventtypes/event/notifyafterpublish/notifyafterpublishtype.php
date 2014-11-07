@@ -37,6 +37,14 @@ class notifyAfterPublishType extends eZWorkflowEventType
         $user = eZuser::fetch($contentobject_id);
         $old_mail = $user->attribute("email");
         $new_mail = $http->postVariable('new_mail');
+
+        if( !eZMail::validate($new_mail) )
+        {
+            //could be improved for sure
+            eZDebug::writeError( "New email is not valid" );
+            return eZWorkflowType::STATUS_WORKFLOW_CANCELLED;
+        }
+
         $exclude_usergroups = $xrowChangeMailINI->variable( 'GeneralSettings', 'UserGroupExcludes' );
         $skip_workflow = false;
         
