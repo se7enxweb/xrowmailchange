@@ -42,7 +42,8 @@ class notifyAfterPublishType extends eZWorkflowEventType
         {
             //could be improved for sure
             eZDebug::writeError( "New email is not valid" );
-            return eZWorkflowType::STATUS_WORKFLOW_CANCELLED;
+            //return eZWorkflowType::STATUS_WORKFLOW_CANCELLED;
+            return false;
         }
 
         $exclude_usergroups = $xrowChangeMailINI->variable( 'GeneralSettings', 'UserGroupExcludes' );
